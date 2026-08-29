@@ -305,36 +305,130 @@ class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/signup":
             form_html = """
-            <div class="card" style="max-width: 480px; margin: 0 auto;">
-                <h2>Create Account</h2>
-                <p class="subtitle">Join MedPulse India to request or safely donate medications.</p>
-                <form action="/signup" method="POST">
-                    <div class="form-group"><label>Full Name / NGO Representative</label><input type="text" name="full_name" placeholder="Aarav Sharma" required></div>
-                    <div class="form-group"><label>Email Address</label><input type="email" name="email" placeholder="aarav@domain.in" required></div>
-                    <div class="form-group"><label>Password</label><input type="password" name="password" placeholder="••••••••" required></div>
-                    <div class="form-group">
-                        <label>Account Type</label>
-                        <select name="role" required>
-                            <option value="user">Patient / Individual Donor</option>
-                            <option value="pharmacist">Pharmacist / NGO Hub Manager</option>
-                        </select>
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div style="text-align: center; margin-bottom: 2.5rem;">
+                    <h2>Join MedPulse India</h2>
+                    <p class="subtitle" style="margin-bottom: 0;">Select your account category to register</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem;">
+                    <!-- Card 1: Patient / Individual Donor Registration -->
+                    <div class="card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                                <span style="font-size: 1.75rem;">👤</span>
+                                <h3 style="margin-bottom: 0;">Patient & Individual Donor</h3>
+                            </div>
+                            <p class="subtitle" style="margin-bottom: 1.5rem; font-size: 0.88rem;">Register to safely donate unused medicine or request free prescription fulfillment.</p>
+                            
+                            <form action="/signup" method="POST">
+                                <input type="hidden" name="role" value="user">
+                                <div class="form-group">
+                                    <label>Full Name</label>
+                                    <input type="text" name="full_name" placeholder="Aarav Sharma" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email Address</label>
+                                    <input type="email" name="email" placeholder="aarav@domain.in" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" name="password" placeholder="••••••••" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Sign Up as Individual / Patient</button>
+                            </form>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Get Started</button>
-                </form>
+
+                    <!-- Card 2: Pharmacist / NGO Manager Registration -->
+                    <div class="card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between; border-color: #cbd5e1;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                                <span style="font-size: 1.75rem;">🏥</span>
+                                <h3 style="margin-bottom: 0;">Pharmacist & NGO Hub</h3>
+                            </div>
+                            <p class="subtitle" style="margin-bottom: 1.5rem; font-size: 0.88rem;">Register your certified pharmacy or distribution hub to inspect and issue donations.</p>
+                            
+                            <form action="/signup" method="POST">
+                                <input type="hidden" name="role" value="pharmacist">
+                                <div class="form-group">
+                                    <label>Hub Representative Name</label>
+                                    <input type="text" name="full_name" placeholder="Dr. Rajesh Kumar" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Work / Organization Email</label>
+                                    <input type="email" name="email" placeholder="rajesh@pharmacy.in" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" name="password" placeholder="••••••••" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block" style="background: linear-gradient(135deg, var(--accent) 0%, #0d9488 100%);">Sign Up as Partner Hub</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
             """
             self.send_html(form_html)
 
         elif self.path == "/login":
             form_html = """
-            <div class="card" style="max-width: 440px; margin: 0 auto;">
-                <h2>Welcome Back</h2>
-                <p class="subtitle">Access your MedPulse account</p>
-                <form action="/login" method="POST">
-                    <div class="form-group"><label>Email Address</label><input type="email" name="email" placeholder="aarav@domain.in" required></div>
-                    <div class="form-group"><label>Password</label><input type="password" name="password" placeholder="••••••••" required></div>
-                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-                </form>
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div style="text-align: center; margin-bottom: 2.5rem;">
+                    <h2>Welcome Back to MedPulse</h2>
+                    <p class="subtitle" style="margin-bottom: 0;">Select your login portal to access your account</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem;">
+                    <!-- Card 1: Patient / Donor Login -->
+                    <div class="card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                                <span style="font-size: 1.75rem;">👤</span>
+                                <h3 style="margin-bottom: 0;">Patient & Donor</h3>
+                            </div>
+                            <p class="subtitle" style="margin-bottom: 1.5rem; font-size: 0.88rem;">Sign in to check MedCoins balance, offer donations, or request medicine.</p>
+                            
+                            <form action="/login" method="POST">
+                                <input type="hidden" name="login_type" value="user">
+                                <div class="form-group">
+                                    <label>Email Address</label>
+                                    <input type="email" name="email" placeholder="aarav@domain.in" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" name="password" placeholder="••••••••" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Sign In as Donor / Recipient</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Pharmacist / NGO Hub Login -->
+                    <div class="card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between; border-color: #cbd5e1;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                                <span style="font-size: 1.75rem;">🏥</span>
+                                <h3 style="margin-bottom: 0;">Pharmacist & NGO Hub</h3>
+                            </div>
+                            <p class="subtitle" style="margin-bottom: 1.5rem; font-size: 0.88rem;">Sign in to verify incoming medications and track distributions.</p>
+                            
+                            <form action="/login" method="POST">
+                                <input type="hidden" name="login_type" value="pharmacist">
+                                <div class="form-group">
+                                    <label>Hub / Work Email</label>
+                                    <input type="email" name="email" placeholder="pharmacist@hub.in" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" name="password" placeholder="••••••••" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block" style="background: linear-gradient(135deg, var(--accent) 0%, #0d9488 100%);">Sign In to Hub Portal</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
             """
             self.send_html(form_html)
@@ -497,7 +591,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
                     <div class="form-group">
                         <label>Patient ID / NGO Reference Number</label>
-                        <input type="text" name="patient_id" placeholder="e.g. [Aadhaar Redacted] or Ayushman Bharat ID" required>
+                        <input type="text" name="patient_id" placeholder="e.g. [Reference ID] or Ayushman Bharat ID" required>
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-block">Submit Request</button>
@@ -600,6 +694,7 @@ class RequestHandler(BaseHTTPRequestHandler):
     def process_login(self, form_data):
         email = form_data.get("email", [""])[0]
         password = form_data.get("password", [""])[0]
+        login_type = form_data.get("login_type", ["user"])[0]
 
         password_hash = hash_password(password)
 
@@ -615,6 +710,11 @@ class RequestHandler(BaseHTTPRequestHandler):
             if user:
                 user_role = user.get("role") or "user"
                 user_name_encoded = urllib.parse.quote(user["full_name"])
+
+                if login_type == "pharmacist" and user_role not in ["pharmacist", "ngo"]:
+                    message = '<div class="alert alert-error"><span>✕</span> Access Denied: Account does not have Pharmacist / NGO privileges. <a href="/login">Please use the Patient & Donor card</a>.</div>'
+                    self.send_html(message)
+                    return
 
                 if user_role in ["pharmacist", "ngo"]:
                     self.render_pharmacist_portal()
