@@ -59,35 +59,39 @@ HTML_PAGE = """<!DOCTYPE html>
   <title>MedPulse | Surplus Medicine Redistribution India</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {{
-      --primary: #0284c7;
-      --primary-hover: #0369a1;
-      --primary-light: #e0f2fe;
-      --accent: #0f766e;
-      --accent-light: #ccfbf1;
-      --bg: #f4f7fb;
-      --surface: #ffffff;
-      --border: #e2e8f0;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --radius-sm: 8px;
-      --radius: 14px;
-      --radius-lg: 20px;
-      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
-      --shadow-md: 0 10px 20px -6px rgba(2, 132, 199, 0.12), 0 4px 8px -4px rgba(15, 23, 42, 0.06);
-      --shadow-lg: 0 25px 40px -10px rgba(2, 132, 199, 0.18), 0 8px 16px -8px rgba(15, 23, 42, 0.08);
-      --ring: 0 0 0 4px var(--primary-light);
+      --primary: #00f5c9;
+      --primary-hover: #1dffd6;
+      --primary-dim: rgba(0, 245, 201, 0.15);
+      --accent: #ff4d6d;
+      --accent-dim: rgba(255, 77, 109, 0.15);
+      --violet: #8b7cff;
+      --violet-deep: #6c5ce7;
+      --bg: #05070d;
+      --surface: #0d1420;
+      --surface-2: #121a2c;
+      --border: rgba(255, 255, 255, 0.09);
+      --text-main: #f4f7fb;
+      --text-muted: #8f9bb3;
+      --radius-sm: 10px;
+      --radius: 16px;
+      --radius-lg: 22px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 12px 28px -8px rgba(0, 245, 201, 0.16), 0 6px 14px -6px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 30px 50px -12px rgba(0, 245, 201, 0.24), 0 10px 20px -8px rgba(0, 0, 0, 0.55);
+      --ring: 0 0 0 4px var(--primary-dim);
     }}
 
-    * {{ margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }}
+    * {{ margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }}
     html {{ scroll-behavior: smooth; }}
 
     body {{
       background:
-        radial-gradient(1100px 480px at 12% -10%, #e0f2fe 0%, rgba(224,242,254,0) 60%),
-        radial-gradient(900px 420px at 110% 0%, #ccfbf1 0%, rgba(204,251,241,0) 55%),
+        radial-gradient(900px 460px at 8% -8%, rgba(0, 245, 201, 0.16) 0%, rgba(0, 245, 201, 0) 60%),
+        radial-gradient(820px 420px at 108% 6%, rgba(255, 77, 109, 0.14) 0%, rgba(255, 77, 109, 0) 55%),
+        radial-gradient(1000px 620px at 50% 112%, rgba(139, 124, 255, 0.14) 0%, rgba(139, 124, 255, 0) 60%),
         var(--bg);
       color: var(--text-main);
       line-height: 1.55;
@@ -95,8 +99,8 @@ HTML_PAGE = """<!DOCTYPE html>
       min-height: 100vh;
     }}
 
-    ::selection {{ background: var(--primary-light); color: var(--primary-hover); }}
-    h1, h2, h3 {{ font-family: 'Sora', 'Plus Jakarta Sans', sans-serif; }}
+    ::selection {{ background: var(--primary-dim); color: var(--primary); }}
+    h1, h2, h3 {{ font-family: 'Space Grotesk', 'Inter', sans-serif; }}
 
     @keyframes fadeUp {{
       from {{ opacity: 0; transform: translateY(14px); }}
@@ -106,6 +110,15 @@ HTML_PAGE = """<!DOCTYPE html>
       from {{ opacity: 0; }}
       to {{ opacity: 1; }}
     }}
+    @keyframes pulseDraw {{
+      0% {{ stroke-dashoffset: 340; opacity: 0.3; }}
+      55% {{ opacity: 1; }}
+      100% {{ stroke-dashoffset: -340; opacity: 0.3; }}
+    }}
+    @keyframes pulseDot {{
+      0%, 100% {{ opacity: 0.55; box-shadow: 0 0 0 4px var(--primary-dim), 0 0 10px var(--primary); }}
+      50% {{ opacity: 1; box-shadow: 0 0 0 6px var(--primary-dim), 0 0 18px var(--primary); }}
+    }}
 
     .app-shell {{ display: flex; flex-direction: column; min-height: 100vh; }}
 
@@ -114,34 +127,42 @@ HTML_PAGE = """<!DOCTYPE html>
       justify-content: space-between;
       align-items: center;
       padding: 1rem 3rem;
-      background: rgba(255, 255, 255, 0.78);
-      backdrop-filter: blur(14px) saturate(160%);
-      -webkit-backdrop-filter: blur(14px) saturate(160%);
-      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+      background: rgba(8, 12, 20, 0.72);
+      backdrop-filter: blur(16px) saturate(160%);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+      border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
       z-index: 100;
     }}
+    .navbar::after {{
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: -1px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), var(--violet), var(--accent), transparent);
+      opacity: 0.65;
+    }}
     .brand {{
-      font-family: 'Sora', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--primary);
+      font-weight: 700;
+      color: var(--text-main);
       text-decoration: none;
       display: flex;
       align-items: center;
-      gap: 0.55rem;
-      letter-spacing: -0.03em;
+      gap: 0.6rem;
+      letter-spacing: -0.02em;
     }}
     .brand::before {{
       content: "";
-      width: 30px;
-      height: 30px;
-      border-radius: 99px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
       display: inline-block;
-      box-shadow: 0 4px 10px rgba(2, 132, 199, 0.35);
       flex-shrink: 0;
+      animation: pulseDot 1.8s ease-in-out infinite;
     }}
     .brand span {{ color: var(--accent); }}
     .nav-actions {{ display: flex; gap: 0.85rem; align-items: center; }}
@@ -162,19 +183,20 @@ HTML_PAGE = """<!DOCTYPE html>
       white-space: nowrap;
     }}
     .btn-login {{ color: var(--text-main); background: transparent; border-color: var(--border); }}
-    .btn-login:hover {{ background: #f1f5f9; border-color: #cbd5e1; }}
+    .btn-login:hover {{ background: var(--surface-2); border-color: rgba(255, 255, 255, 0.2); }}
     .btn-primary {{
-      color: #fff;
-      background: linear-gradient(135deg, var(--primary) 0%, #0369a1 100%);
-      box-shadow: 0 6px 16px rgba(2, 132, 199, 0.3);
+      color: #04140f;
+      background: linear-gradient(135deg, var(--primary) 0%, #00c2a0 100%);
+      box-shadow: 0 6px 20px rgba(0, 245, 201, 0.32);
+      font-weight: 700;
     }}
-    .btn-primary:hover {{ filter: brightness(1.06); transform: translateY(-2px); box-shadow: 0 10px 22px rgba(2, 132, 199, 0.38); }}
+    .btn-primary:hover {{ filter: brightness(1.08); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0, 245, 201, 0.42); }}
     .btn-block {{ width: 100%; justify-content: center; margin-top: 0.9rem; padding: 0.85rem 1.4rem; font-size: 0.95rem; border-radius: var(--radius-sm); }}
 
     .main-wrapper {{ flex: 1; padding: 3.5rem 1.5rem; max-width: 1200px; margin: 0 auto; width: 100%; animation: fadeIn 0.4s ease; }}
 
     .card {{
-      background: var(--surface);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-md);
@@ -188,8 +210,8 @@ HTML_PAGE = """<!DOCTYPE html>
       content: "";
       position: absolute;
       top: 0; left: 0; right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--violet), var(--accent));
     }}
 
     h2 {{ font-size: 1.85rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.02em; margin-bottom: 0.5rem; }}
@@ -197,27 +219,28 @@ HTML_PAGE = """<!DOCTYPE html>
     p.subtitle {{ color: var(--text-muted); font-size: 0.98rem; margin-bottom: 2rem; }}
 
     .form-group {{ margin-bottom: 1.35rem; text-align: left; }}
-    label {{ display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.45rem; color: #334155; letter-spacing: 0.01em; }}
+    label {{ display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.45rem; color: #b6c0d4; letter-spacing: 0.01em; }}
     input, select, textarea {{
       width: 100%;
       padding: 0.8rem 1rem;
       border: 1.5px solid var(--border);
       border-radius: var(--radius-sm);
       font-size: 0.95rem;
-      background-color: #f8fafc;
+      background-color: rgba(255, 255, 255, 0.03);
       color: var(--text-main);
       transition: all 0.2s;
       font-family: inherit;
+      color-scheme: dark;
     }}
     select {{ cursor: pointer; }}
-    input::placeholder {{ color: #94a3b8; }}
+    input::placeholder {{ color: #5c6b85; }}
     input:focus, select:focus, textarea:focus {{
       outline: none;
       border-color: var(--primary);
-      background-color: #fff;
+      background-color: rgba(0, 245, 201, 0.05);
       box-shadow: var(--ring);
     }}
-    input:disabled, select:disabled {{ opacity: 0.55; cursor: not-allowed; background: #f1f5f9; }}
+    input:disabled, select:disabled {{ opacity: 0.5; cursor: not-allowed; background: rgba(255, 255, 255, 0.02); }}
 
     .alert {{
       padding: 1.1rem 1.3rem;
@@ -232,24 +255,26 @@ HTML_PAGE = """<!DOCTYPE html>
       animation: fadeUp 0.4s ease;
     }}
     .alert span {{ font-size: 1.15rem; line-height: 1; flex-shrink: 0; }}
-    .alert-error {{ background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }}
-    .alert-success {{ background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }}
-    .alert-info {{ background: var(--primary-light); color: var(--primary-hover); border: 1px solid #bae6fd; }}
+    .alert-error {{ background: rgba(255, 77, 109, 0.1); color: #ff8fa3; border: 1px solid rgba(255, 77, 109, 0.35); }}
+    .alert-success {{ background: rgba(0, 245, 201, 0.08); color: var(--primary); border: 1px solid rgba(0, 245, 201, 0.35); }}
+    .alert-info {{ background: rgba(139, 124, 255, 0.1); color: #c3baff; border: 1px solid rgba(139, 124, 255, 0.35); }}
     .alert a {{ color: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }}
 
     .table-container {{ overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); margin-top: 1rem; box-shadow: var(--shadow-sm); }}
     table {{ width: 100%; border-collapse: collapse; font-size: 0.9rem; background: var(--surface); text-align: left; min-width: 650px; }}
-    th {{ background: #f8fafc; color: var(--text-muted); font-weight: 700; padding: 1rem 1.1rem; border-bottom: 1px solid var(--border); text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.05em; }}
+    th {{ background: var(--surface-2); color: var(--text-muted); font-weight: 700; padding: 1rem 1.1rem; border-bottom: 1px solid var(--border); text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.05em; }}
     td {{ padding: 1rem 1.1rem; border-bottom: 1px solid var(--border); color: var(--text-main); vertical-align: middle; }}
     tr:last-child td {{ border-bottom: none; }}
-    tr:hover td {{ background: #f8fafc; }}
+    tr:hover td {{ background: rgba(255, 255, 255, 0.025); }}
 
     .pill {{ padding: 0.3rem 0.85rem; border-radius: 999px; font-weight: 700; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 0.35rem; letter-spacing: 0.02em; }}
-    .pill::before {{ content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }}
-    .pill-pending {{ background: #fef3c7; color: #b45309; }}
-    .pill-verified {{ background: #dcfce7; color: #15803d; }}
+    .pill::before {{ content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; box-shadow: 0 0 6px currentColor; }}
+    .pill-pending {{ background: rgba(255, 190, 0, 0.12); color: #ffc247; }}
+    .pill-verified {{ background: rgba(0, 245, 201, 0.12); color: var(--primary); }}
+    .action-card {{ transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }}
+    .action-card:hover {{ transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--primary) !important; }}
 
-    .hero {{ text-align: center; padding: 5rem 1rem 4rem; animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }}
+    .hero {{ text-align: center; padding: 4rem 1rem 4rem; animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }}
     .hero .eyebrow {{
       display: inline-flex;
       align-items: center;
@@ -260,18 +285,101 @@ HTML_PAGE = """<!DOCTYPE html>
       border-radius: 999px;
       font-size: 0.82rem;
       font-weight: 600;
-      color: var(--primary-hover);
+      color: var(--primary);
       box-shadow: var(--shadow-sm);
       margin-bottom: 1.75rem;
     }}
-    .hero h1 {{ font-size: 3.25rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text-main); margin-bottom: 1.1rem; line-height: 1.12; }}
+    .hero h1 {{ font-size: 3.4rem; font-weight: 700; letter-spacing: -0.03em; color: var(--text-main); margin-bottom: 1.1rem; line-height: 1.12; }}
     .hero h1 .grad {{
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      background: linear-gradient(135deg, var(--primary), var(--violet) 55%, var(--accent));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }}
     .hero p {{ font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2.25rem auto; }}
+
+    .pulse-line {{ display: block; width: 100%; max-width: 620px; height: 64px; margin: 0 auto 1.75rem auto; overflow: visible; }}
+    .pulse-line path {{
+      fill: none;
+      stroke: url(#pulseGradient);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 620;
+      animation: pulseDraw 3.2s linear infinite;
+      filter: drop-shadow(0 0 6px rgba(0, 245, 201, 0.55));
+    }}
+
+    /* Ambient drifting background mesh */
+    body::before {{
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(720px 380px at 22% 18%, rgba(0, 245, 201, 0.10) 0%, rgba(0, 245, 201, 0) 60%),
+        radial-gradient(680px 360px at 78% 82%, rgba(255, 77, 109, 0.09) 0%, rgba(255, 77, 109, 0) 60%);
+      animation: meshDrift 18s ease-in-out infinite;
+      pointer-events: none;
+    }}
+    @keyframes meshDrift {{
+      0%, 100% {{ transform: translate(0, 0) scale(1); }}
+      50% {{ transform: translate(2.5%, -3%) scale(1.07); }}
+    }}
+
+    /* Scroll-triggered reveal */
+    .reveal {{ opacity: 0; transform: translateY(26px); transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }}
+    .reveal.is-visible {{ opacity: 1; transform: translateY(0); }}
+
+    /* 3D tilt on hover (JS-driven) */
+    .tilt-card {{ transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s; will-change: transform; }}
+    .tilt-card:hover {{ box-shadow: var(--shadow-lg); }}
+
+    /* Button ripple */
+    .btn {{ position: relative; overflow: hidden; }}
+    .ripple {{
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.45);
+      transform: scale(0);
+      animation: rippleEffect 0.6s ease-out;
+      pointer-events: none;
+    }}
+    @keyframes rippleEffect {{ to {{ transform: scale(3); opacity: 0; }} }}
+
+    /* Floating hero illustrations */
+    .hero {{ position: relative; }}
+    .hero-deco {{
+      position: absolute;
+      opacity: 0.6;
+      animation: floatY 6s ease-in-out infinite;
+      pointer-events: none;
+    }}
+    @keyframes floatY {{
+      0%, 100% {{ transform: translateY(0) rotate(var(--rot, 0deg)); }}
+      50% {{ transform: translateY(-16px) rotate(var(--rot, 0deg)); }}
+    }}
+
+    /* How it works steps */
+    .steps-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 1rem; }}
+    .step-card {{
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem 1.75rem;
+      text-align: left;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }}
+    .step-card:hover {{ transform: translateY(-6px); border-color: var(--primary); box-shadow: var(--shadow-md); }}
+    .step-icon {{
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--surface-2); border: 1px solid var(--border);
+      margin-bottom: 1.25rem;
+    }}
+    .step-num {{ font-family: 'Space Grotesk', sans-serif; font-size: 0.78rem; font-weight: 700; color: var(--primary); letter-spacing: 0.08em; margin-bottom: 0.5rem; display: block; }}
+    .step-card h3 {{ margin-bottom: 0.5rem; }}
+    .step-card p {{ color: var(--text-muted); font-size: 0.92rem; margin: 0; }}
   </style>
 </head>
 <body>
@@ -290,6 +398,50 @@ HTML_PAGE = """<!DOCTYPE html>
     </main>
   </div>
 
+  <script>
+    (function() {{
+      var revealEls = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window && revealEls.length) {{
+        var io = new IntersectionObserver(function(entries) {{
+          entries.forEach(function(entry) {{
+            if (entry.isIntersecting) {{
+              entry.target.classList.add('is-visible');
+              io.unobserve(entry.target);
+            }}
+          }});
+        }}, {{ threshold: 0.12 }});
+        revealEls.forEach(function(el) {{ io.observe(el); }});
+      }} else {{
+        revealEls.forEach(function(el) {{ el.classList.add('is-visible'); }});
+      }}
+
+      document.querySelectorAll('.btn').forEach(function(btn) {{
+        btn.addEventListener('click', function(e) {{
+          var rect = btn.getBoundingClientRect();
+          var ripple = document.createElement('span');
+          var size = Math.max(rect.width, rect.height);
+          ripple.className = 'ripple';
+          ripple.style.width = ripple.style.height = size + 'px';
+          ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+          ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+          btn.appendChild(ripple);
+          setTimeout(function() {{ ripple.remove(); }}, 650);
+        }});
+      }});
+
+      document.querySelectorAll('.tilt-card').forEach(function(card) {{
+        card.addEventListener('mousemove', function(e) {{
+          var rect = card.getBoundingClientRect();
+          var x = (e.clientX - rect.left) / rect.width - 0.5;
+          var y = (e.clientY - rect.top) / rect.height - 0.5;
+          card.style.transform = 'perspective(900px) rotateY(' + (x * 8) + 'deg) rotateX(' + (-y * 8) + 'deg) translateY(-4px)';
+        }});
+        card.addEventListener('mouseleave', function() {{
+          card.style.transform = '';
+        }});
+      }});
+    }})();
+  </script>
 </body>
 </html>
 """
@@ -302,136 +454,223 @@ class RequestHandler(BaseHTTPRequestHandler):
         response = HTML_PAGE.format(content=content)
         self.wfile.write(response.encode("utf-8"))
 
+    def render_auth_page(self, mode, selected_role=None):
+        """
+        Show role selection first. The user only sees the corresponding
+        login/signup form after choosing Donor/Recipient or Pharmacist/NGO Hub.
+        """
+        is_signup = mode == "signup"
+        page_title = "Join MedPulse India" if is_signup else "Welcome Back to MedPulse"
+        action_text = "register" if is_signup else "log in"
+        page_intro = (
+            "Choose how you want to use MedPulse before creating your account."
+            if is_signup
+            else "Choose your portal before entering your login details."
+        )
+        button_text = "Sign Up" if is_signup else "Log In"
+
+        base_path = "/signup" if is_signup else "/login"
+
+        if selected_role not in ("user", "pharmacist"):
+            form_html = f"""
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div style="text-align: center; margin-bottom: 2.5rem;">
+                    <h2>{page_title}</h2>
+                    <p class="subtitle" style="margin-bottom: 0;">{page_intro}</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem;">
+                    <a href="{base_path}?role=user" class="card tilt-card"
+                       style="margin-bottom: 0; display: block; text-decoration: none; color: var(--text-main);">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.7rem;">
+                            <span style="font-size: 1.9rem;">👤</span>
+                            <h3 style="margin-bottom: 0;">Donor / Recipient</h3>
+                        </div>
+                        <p class="subtitle" style="margin-bottom: 1.5rem; font-size: 0.9rem;">
+                            {("Create an account to donate unused medicine or request verified medicine."
+                              if is_signup else
+                              "Access your account to donate surplus medicine or request verified medicine.")}
+                        </p>
+                        <span class="btn btn-primary btn-block">{button_text} as Donor / Recipient</span>
+                    </a>
+
+                    <a href="{base_path}?role=pharmacist" class="card tilt-card"
+                       style="margin-bottom: 0; display: block; text-decoration: none; color: var(--text-main); border-color: rgba(139, 124, 255, 0.4);">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.7rem;">
+                            <span style="font-size: 1.9rem;">🏥</span>
+                            <h3 style="margin-bottom: 0;">Pharmacist / NGO Hub</h3>
+                        </div>
+                        <p class="subtitle" style="margin-bottom: 1.5rem; font-size: 0.9rem;">
+                            {("Register your certified pharmacy or NGO hub to verify and distribute donations."
+                              if is_signup else
+                              "Access your pharmacy or NGO hub portal to verify medicines and track distributions.")}
+                        </p>
+                        <span class="btn btn-primary btn-block"
+                              style="background: linear-gradient(135deg, var(--violet) 0%, var(--violet-deep) 100%);">
+                            {button_text} as Pharmacist / NGO
+                        </span>
+                    </a>
+                </div>
+            </div>
+            """
+            self.send_html(form_html)
+            return
+
+        if selected_role == "user":
+            role_label = "Donor / Recipient"
+            icon = "👤"
+            if is_signup:
+                form_html = f"""
+                <div class="card" style="max-width: 620px; margin: 0 auto;">
+                    <div style="text-align: center; margin-bottom: 1.8rem;">
+                        <div style="font-size: 2rem; margin-bottom: 0.4rem;">{icon}</div>
+                        <h2>Create Donor / Recipient Account</h2>
+                        <p class="subtitle" style="margin-bottom: 0;">
+                            Register to donate unused medicine or request verified medicine.
+                        </p>
+                    </div>
+
+                    <form action="/signup" method="POST">
+                        <input type="hidden" name="role" value="user">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" name="full_name" placeholder="Aarav Sharma" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="email" placeholder="aarav@domain.in" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Sign Up as Donor / Recipient
+                        </button>
+                    </form>
+
+                    <a href="/signup" class="btn btn-login btn-block" style="margin-top: 0.7rem;">
+                        ← Choose Different Role
+                    </a>
+                </div>
+                """
+            else:
+                form_html = f"""
+                <div class="card" style="max-width: 620px; margin: 0 auto;">
+                    <div style="text-align: center; margin-bottom: 1.8rem;">
+                        <div style="font-size: 2rem; margin-bottom: 0.4rem;">{icon}</div>
+                        <h2>Donor / Recipient Login</h2>
+                        <p class="subtitle" style="margin-bottom: 0;">
+                            Sign in to donate surplus medicine or request verified medicine.
+                        </p>
+                    </div>
+
+                    <form action="/login" method="POST">
+                        <input type="hidden" name="login_type" value="user">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="email" placeholder="aarav@domain.in" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Log In as Donor / Recipient
+                        </button>
+                    </form>
+
+                    <a href="/login" class="btn btn-login btn-block" style="margin-top: 0.7rem;">
+                        ← Choose Different Role
+                    </a>
+                </div>
+                """
+        else:
+            role_label = "Pharmacist / NGO Hub"
+            icon = "🏥"
+            if is_signup:
+                form_html = f"""
+                <div class="card" style="max-width: 620px; margin: 0 auto; border-color: rgba(139, 124, 255, 0.4);">
+                    <div style="text-align: center; margin-bottom: 1.8rem;">
+                        <div style="font-size: 2rem; margin-bottom: 0.4rem;">{icon}</div>
+                        <h2>Create Pharmacist / NGO Account</h2>
+                        <p class="subtitle" style="margin-bottom: 0;">
+                            Register your certified pharmacy or distribution hub.
+                        </p>
+                    </div>
+
+                    <form action="/signup" method="POST">
+                        <input type="hidden" name="role" value="pharmacist">
+                        <div class="form-group">
+                            <label>Hub Representative Name</label>
+                            <input type="text" name="full_name" placeholder="Dr. Rajesh Kumar" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Work / Organization Email</label>
+                            <input type="email" name="email" placeholder="rajesh@pharmacy.in" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block"
+                                style="background: linear-gradient(135deg, var(--violet) 0%, var(--violet-deep) 100%);">
+                            Sign Up as Pharmacist / NGO
+                        </button>
+                    </form>
+
+                    <a href="/signup" class="btn btn-login btn-block" style="margin-top: 0.7rem;">
+                        ← Choose Different Role
+                    </a>
+                </div>
+                """
+            else:
+                form_html = f"""
+                <div class="card" style="max-width: 620px; margin: 0 auto; border-color: rgba(139, 124, 255, 0.4);">
+                    <div style="text-align: center; margin-bottom: 1.8rem;">
+                        <div style="font-size: 2rem; margin-bottom: 0.4rem;">{icon}</div>
+                        <h2>Pharmacist / NGO Login</h2>
+                        <p class="subtitle" style="margin-bottom: 0;">
+                            Sign in to verify incoming medications and track distributions.
+                        </p>
+                    </div>
+
+                    <form action="/login" method="POST">
+                        <input type="hidden" name="login_type" value="pharmacist">
+                        <div class="form-group">
+                            <label>Hub / Work Email</label>
+                            <input type="email" name="email" placeholder="pharmacist@hub.in" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block"
+                                style="background: linear-gradient(135deg, var(--violet) 0%, var(--violet-deep) 100%);">
+                            Log In as Pharmacist / NGO
+                        </button>
+                    </form>
+
+                    <a href="/login" class="btn btn-login btn-block" style="margin-top: 0.7rem;">
+                        ← Choose Different Role
+                    </a>
+                </div>
+                """
+
+        self.send_html(form_html)
+
     def do_GET(self):
-        if self.path == "/signup":
-            form_html = """
-            <div style="max-width: 900px; margin: 0 auto;">
-                <div style="text-align: center; margin-bottom: 2.5rem;">
-                    <h2>Join MedPulse India</h2>
-                    <p class="subtitle" style="margin-bottom: 0;">Select your account category to register</p>
-                </div>
+        parsed_url = urllib.parse.urlparse(self.path)
+        request_path = parsed_url.path
+        query_params = urllib.parse.parse_qs(parsed_url.query)
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem;">
-                    <!-- Card 1: Patient / Individual Donor Registration -->
-                    <div class="card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
-                                <span style="font-size: 1.75rem;">👤</span>
-                                <h3 style="margin-bottom: 0;">Patient & Individual Donor</h3>
-                            </div>
-                            <p class="subtitle" style="margin-bottom: 1.5rem; font-size: 0.88rem;">Register to safely donate unused medicine or request free prescription fulfillment.</p>
-                            
-                            <form action="/signup" method="POST">
-                                <input type="hidden" name="role" value="user">
-                                <div class="form-group">
-                                    <label>Full Name</label>
-                                    <input type="text" name="full_name" placeholder="Aarav Sharma" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Email Address</label>
-                                    <input type="email" name="email" placeholder="aarav@domain.in" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Password</label>
-                                    <input type="password" name="password" placeholder="••••••••" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block">Sign Up as Individual / Patient</button>
-                            </form>
-                        </div>
-                    </div>
+        if request_path == "/signup":
+            selected_role = query_params.get("role", [None])[0]
+            self.render_auth_page("signup", selected_role)
 
-                    <!-- Card 2: Pharmacist / NGO Manager Registration -->
-                    <div class="card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between; border-color: #cbd5e1;">
-                        <div>
-                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
-                                <span style="font-size: 1.75rem;">🏥</span>
-                                <h3 style="margin-bottom: 0;">Pharmacist & NGO Hub</h3>
-                            </div>
-                            <p class="subtitle" style="margin-bottom: 1.5rem; font-size: 0.88rem;">Register your certified pharmacy or distribution hub to inspect and issue donations.</p>
-                            
-                            <form action="/signup" method="POST">
-                                <input type="hidden" name="role" value="pharmacist">
-                                <div class="form-group">
-                                    <label>Hub Representative Name</label>
-                                    <input type="text" name="full_name" placeholder="Dr. Rajesh Kumar" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Work / Organization Email</label>
-                                    <input type="email" name="email" placeholder="rajesh@pharmacy.in" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Password</label>
-                                    <input type="password" name="password" placeholder="••••••••" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block" style="background: linear-gradient(135deg, var(--accent) 0%, #0d9488 100%);">Sign Up as Partner Hub</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            """
-            self.send_html(form_html)
-
-        elif self.path == "/login":
-            form_html = """
-            <div style="max-width: 900px; margin: 0 auto;">
-                <div style="text-align: center; margin-bottom: 2.5rem;">
-                    <h2>Welcome Back to MedPulse</h2>
-                    <p class="subtitle" style="margin-bottom: 0;">Select your login portal to access your account</p>
-                </div>
-
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem;">
-                    <!-- Card 1: Patient / Donor Login -->
-                    <div class="card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
-                                <span style="font-size: 1.75rem;">👤</span>
-                                <h3 style="margin-bottom: 0;">Patient & Donor</h3>
-                            </div>
-                            <p class="subtitle" style="margin-bottom: 1.5rem; font-size: 0.88rem;">Sign in to check MedCoins balance, offer donations, or request medicine.</p>
-                            
-                            <form action="/login" method="POST">
-                                <input type="hidden" name="login_type" value="user">
-                                <div class="form-group">
-                                    <label>Email Address</label>
-                                    <input type="email" name="email" placeholder="aarav@domain.in" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Password</label>
-                                    <input type="password" name="password" placeholder="••••••••" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block">Sign In as Donor / Recipient</button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Card 2: Pharmacist / NGO Hub Login -->
-                    <div class="card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between; border-color: #cbd5e1;">
-                        <div>
-                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
-                                <span style="font-size: 1.75rem;">🏥</span>
-                                <h3 style="margin-bottom: 0;">Pharmacist & NGO Hub</h3>
-                            </div>
-                            <p class="subtitle" style="margin-bottom: 1.5rem; font-size: 0.88rem;">Sign in to verify incoming medications and track distributions.</p>
-                            
-                            <form action="/login" method="POST">
-                                <input type="hidden" name="login_type" value="pharmacist">
-                                <div class="form-group">
-                                    <label>Hub / Work Email</label>
-                                    <input type="email" name="email" placeholder="pharmacist@hub.in" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Password</label>
-                                    <input type="password" name="password" placeholder="••••••••" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block" style="background: linear-gradient(135deg, var(--accent) 0%, #0d9488 100%);">Sign In to Hub Portal</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            """
-            self.send_html(form_html)
+        elif request_path == "/login":
+            selected_role = query_params.get("role", [None])[0]
+            self.render_auth_page("login", selected_role)
 
         elif self.path.startswith("/give"):
             query_components = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
@@ -456,7 +695,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 <form action="/give" method="POST">
                     <div class="form-group">
                         <label>Donor Name (Logged In)</label>
-                        <input type="text" name="donor_name" value="{logged_in_user}" readonly style="background-color: #e2e8f0; cursor: not-allowed;">
+                        <input type="text" name="donor_name" value="{logged_in_user}" readonly style="background-color: rgba(255, 255, 255, 0.03); color: var(--text-muted); cursor: not-allowed;">
                     </div>
                     <div class="form-group">
                         <label>Donor Phone Number</label>
@@ -568,7 +807,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 <form action="/receive" method="POST">
                     <div class="form-group">
                         <label>Recipient Name (Logged In)</label>
-                        <input type="text" name="recipient_name" value="{logged_in_user}" readonly style="background-color: #e2e8f0; cursor: not-allowed;">
+                        <input type="text" name="recipient_name" value="{logged_in_user}" readonly style="background-color: rgba(255, 255, 255, 0.03); color: var(--text-muted); cursor: not-allowed;">
                     </div>
                     <div class="form-group">
                         <label>Recipient Phone Number</label>
@@ -639,12 +878,69 @@ class RequestHandler(BaseHTTPRequestHandler):
         else:
             home_html = """
             <div class="hero">
+                <svg class="hero-deco" style="top: 6%; left: 6%; width: 46px; height: 46px; --rot: -18deg; animation-duration: 6.5s;" viewBox="0 0 24 24" fill="none" stroke="#00f5c9" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2.5" y="9" width="19" height="6" rx="3" transform="rotate(-35 12 12)"/>
+                    <line x1="9.5" y1="9.5" x2="14.5" y2="14.5" transform="rotate(-35 12 12)"/>
+                </svg>
+                <svg class="hero-deco" style="top: 12%; right: 8%; width: 40px; height: 40px; --rot: 12deg; animation-duration: 7.5s; animation-delay: 0.6s;" viewBox="0 0 24 24" fill="none" stroke="#8b7cff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="4" x2="12" y2="20"/>
+                    <line x1="4" y1="12" x2="20" y2="12"/>
+                </svg>
+                <svg class="hero-deco" style="bottom: 8%; left: 10%; width: 42px; height: 42px; --rot: -8deg; animation-duration: 8s; animation-delay: 1.1s;" viewBox="0 0 24 24" fill="none" stroke="#ff4d6d" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 20s-6.5-4-8.5-8.2C2 8.4 3.3 5 6.8 5c1.9 0 3.3 1.1 5.2 3.4C13.9 6.1 15.3 5 17.2 5c3.5 0 4.8 3.4 3.3 6.8C18.5 16 12 20 12 20z"/>
+                </svg>
+                <svg class="hero-deco" style="bottom: 14%; right: 12%; width: 40px; height: 40px; --rot: 16deg; animation-duration: 6.8s; animation-delay: 0.3s;" viewBox="0 0 24 24" fill="none" stroke="#00f5c9" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3l7 3.2v5.3c0 4.6-3 7.6-7 9-4-1.4-7-4.4-7-9V6.2L12 3z"/>
+                    <path d="M9 12l2 2 4-4"/>
+                </svg>
+
+                <svg class="pulse-line" viewBox="0 0 620 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="pulseGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#00f5c9"/>
+                            <stop offset="50%" stop-color="#8b7cff"/>
+                            <stop offset="100%" stop-color="#ff4d6d"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M0,32 L140,32 L162,32 L176,10 L192,54 L208,4 L224,32 L246,32 L440,32 L458,32 L472,14 L488,50 L504,10 L520,32 L542,32 L620,32"/>
+                </svg>
                 <div class="eyebrow">🩺 Community-powered medicine sharing in India</div>
                 <h1>Bridging Surplus Medicine<br>To <span class="grad">Those Who Need It.</span></h1>
                 <p>MedPulse connects patients, verified NGO hubs, and retail pharmacies across major Indian cities.</p>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
                     <a href="/signup" class="btn btn-primary">Create an Account</a>
                     <a href="/login" class="btn btn-login">Sign In to Dashboard</a>
+                </div>
+            </div>
+
+            <div style="max-width: 1000px; margin: 4rem auto 0 auto; text-align: center;">
+                <h2 class="reveal" style="font-size: 1.6rem;">How MedPulse Works</h2>
+                <p class="subtitle reveal" style="transition-delay: 0.05s;">Three simple steps from surplus strip to a patient who needs it.</p>
+                <div class="steps-grid">
+                    <div class="step-card reveal">
+                        <div class="step-icon">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#00f5c9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="7" rx="3.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                        </div>
+                        <span class="step-num">STEP 01</span>
+                        <h3>Donate Surplus Medicine</h3>
+                        <p>List sealed, unexpired medication you no longer need and pick a nearby drop-off hub.</p>
+                    </div>
+                    <div class="step-card reveal" style="transition-delay: 0.12s;">
+                        <div class="step-icon">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8b7cff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+                        </div>
+                        <span class="step-num">STEP 02</span>
+                        <h3>Pharmacist Verifies It</h3>
+                        <p>A certified pharmacy or NGO hub inspects the medicine and confirms it's safe to redistribute.</p>
+                    </div>
+                    <div class="step-card reveal" style="transition-delay: 0.24s;">
+                        <div class="step-icon">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ff4d6d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-6.5-4-8.5-8.2C2 8.7 3.3 5.3 6.8 5.3c1.9 0 3.3 1.1 5.2 3.4 1.9-2.3 3.3-3.4 5.2-3.4 3.5 0 4.8 3.4 3.3 6.8-2 4.2-8.5 8.2-8.5 8.2z"/></svg>
+                        </div>
+                        <span class="step-num">STEP 03</span>
+                        <h3>Patients Receive It Free</h3>
+                        <p>Recipients pick up verified medicine at the hub — no cost, no wait for a prescription refill.</p>
+                    </div>
                 </div>
             </div>
             """
@@ -712,7 +1008,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 user_name_encoded = urllib.parse.quote(user["full_name"])
 
                 if login_type == "pharmacist" and user_role not in ["pharmacist", "ngo"]:
-                    message = '<div class="alert alert-error"><span>✕</span> Access Denied: Account does not have Pharmacist / NGO privileges. <a href="/login">Please use the Patient & Donor card</a>.</div>'
+                    message = '<div class="alert alert-error"><span>✕</span> Access Denied: Account does not have Pharmacist / NGO privileges. <a href="/login">Please use the Donor / Patient login card</a>.</div>'
                     self.send_html(message)
                     return
 
@@ -720,7 +1016,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                     self.render_pharmacist_portal()
                 else:
                     dashboard_html = f"""
-                    <div class="stats-card" style="background: linear-gradient(135deg, #0284c7 0%, #0f766e 100%); color: white; border-radius: var(--radius-lg); padding: 2rem 2.25rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.25rem; box-shadow: var(--shadow-lg);">
+                    <div class="stats-card reveal" style="background: linear-gradient(135deg, var(--primary) 0%, var(--violet) 100%); color: white; border-radius: var(--radius-lg); padding: 2rem 2.25rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.25rem; box-shadow: var(--shadow-lg);">
                         <div>
                             <h2 style="color: white; margin: 0;">Namaste, {user["full_name"]}</h2>
                             <p style="opacity: 0.9; margin: 0;">Manage your donations and medicine requests in India</p>
@@ -732,11 +1028,11 @@ class RequestHandler(BaseHTTPRequestHandler):
 
                     <h3>Actions Overview</h3>
                     <div class="action-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-                      <a href="/receive?user_name={user_name_encoded}" class="action-card" style="padding: 2.1rem; border: 1px solid var(--border); border-radius: var(--radius-lg); text-decoration: none; color: var(--text-main); background: var(--surface);">
+                      <a href="/receive?user_name={user_name_encoded}" class="action-card reveal" style="padding: 2.1rem; border: 1px solid var(--border); border-radius: var(--radius-lg); text-decoration: none; color: var(--text-main); background: var(--surface);">
                         <div class="action-title" style="font-weight: 700; font-size: 1.25rem;">📥 Receive Medicine</div>
                         <div class="action-desc" style="font-size: 0.9rem; color: var(--text-muted);">Request verified unexpired medications free of charge at an Indian partner hub near you.</div>
                       </a>
-                      <a href="/give?user_name={user_name_encoded}" class="action-card" style="padding: 2.1rem; border: 1px solid var(--border); border-radius: var(--radius-lg); text-decoration: none; color: var(--text-main); background: var(--surface);">
+                      <a href="/give?user_name={user_name_encoded}" class="action-card reveal" style="padding: 2.1rem; border: 1px solid var(--border); border-radius: var(--radius-lg); text-decoration: none; color: var(--text-main); background: var(--surface); transition-delay: 0.1s;">
                         <div class="action-title" style="font-weight: 700; font-size: 1.25rem;">🎁 Give / Donate</div>
                         <div class="action-desc" style="font-size: 0.9rem; color: var(--text-muted);">Offer unused sealed medicine to local NGO hubs or pharmacies.</div>
                       </a>
