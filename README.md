@@ -1,4 +1,5 @@
 import hashlib
+from datetime import date
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 import urllib.parse
@@ -233,6 +234,8 @@ HTML_PAGE = """<!DOCTYPE html>
       color-scheme: dark;
     }}
     select {{ cursor: pointer; }}
+    select option {{ background-color: var(--surface); color: var(--text-main); }}
+    select option:checked, select option:hover {{ background-color: var(--surface-2); color: var(--text-main); }}
     input::placeholder {{ color: #5c6b85; }}
     input:focus, select:focus, textarea:focus {{
       outline: none;
@@ -699,7 +702,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                     </div>
                     <div class="form-group">
                         <label>Donor Phone Number</label>
-                        <input type="tel" name="donor_phone" placeholder="Enter phone number" required>
+                        <input type="tel" name="donor_phone" placeholder="Enter phone number" autocomplete="off" required>
                     </div>
                     <div class="form-group">
                         <label>Medicine Name</label>
@@ -776,8 +779,10 @@ class RequestHandler(BaseHTTPRequestHandler):
             try:
                 conn = get_db()
                 cursor = conn.cursor(dictionary=True)
+                # Pull expiry_date too so Python can enforce freshness itself,
+                # rather than trusting the DB engine's date handling/timezone.
                 cursor.execute(
-                    "SELECT DISTINCT medicine_name, location FROM donations WHERE status = 'RECEIVED_AND_VERIFIED'"
+                    "SELECT DISTINCT medicine_name, location, expiry_date FROM donations WHERE status = 'RECEIVED_AND_VERIFIED'"
                 )
                 available_items = cursor.fetchall()
                 cursor.close()
@@ -785,19 +790,37 @@ class RequestHandler(BaseHTTPRequestHandler):
             except mysql.connector.Error:
                 available_items = []
 
+            today = date.today()
             med_location_map = {}
+            med_display_names = {}  # normalized key -> first-seen display casing
             for item in available_items:
-                med = item["medicine_name"]
+                expiry = item.get("expiry_date")
+                # Skip anything already expired (or missing an expiry date) so
+                # it never appears in the "available medicines" dropdown.
+                if not expiry or expiry < today:
+                    continue
+
+                med_raw = item["medicine_name"].strip()
                 loc = item["location"]
-                med_location_map.setdefault(med, [])
-                if loc not in med_location_map[med]:
-                    med_location_map[med].append(loc)
+                med_key = med_raw.lower()  # de-dupe case/whitespace variants
+
+                med_display_names.setdefault(med_key, med_raw)
+                med_location_map.setdefault(med_key, [])
+                if loc not in med_location_map[med_key]:
+                    med_location_map[med_key].append(loc)
+
+            # Re-key by the original display casing so the submitted form value
+            # still matches the medicine_name string stored in the DB.
+            final_location_map = {
+                med_display_names[med_key]: locations
+                for med_key, locations in med_location_map.items()
+            }
 
             med_options = "".join([
-                f'<option value="{med}">{med}</option>' for med in med_location_map.keys()
+                f'<option value="{med}">{med}</option>' for med in final_location_map.keys()
             ]) or '<option value="">-- No Verified Medicines Available Currently --</option>'
 
-            js_object_str = json.dumps(med_location_map)
+            js_object_str = json.dumps(final_location_map)
 
             receive_html = f"""
             <div class="card" style="max-width: 680px; margin: 0 auto;">
@@ -811,7 +834,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                     </div>
                     <div class="form-group">
                         <label>Recipient Phone Number</label>
-                        <input type="tel" name="recipient_phone" placeholder="Enter phone number" required>
+                        <input type="tel" name="recipient_phone" placeholder="Enter phone number" autocomplete="off" required>
                     </div>
                     <div class="form-group">
                         <label>Available Verified Medicine</label>
